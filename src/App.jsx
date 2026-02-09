@@ -1,28 +1,12 @@
 import { useState, useEffect } from 'react';
 
 function App() {
-  const [prompt, setPrompt] = useState(() => {
-    return localStorage.getItem('promptPerfect_prompt') || '';
-  });
-  const [output, setOutput] = useState(() => {
-    return localStorage.getItem('promptPerfect_output') || '';
-  });
+  const [prompt, setPrompt] = useState('');
+  const [output, setOutput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const [outputLoaded, setOutputLoaded] = useState(() => {
-    return !!localStorage.getItem('promptPerfect_output');
-  });
+  const [outputLoaded, setOutputLoaded] = useState(false);
   const [outputKey, setOutputKey] = useState(0);
-
-  useEffect(() => {
-    localStorage.setItem('promptPerfect_prompt', prompt);
-  }, [prompt]);
-
-  useEffect(() => {
-    if (output) {
-      localStorage.setItem('promptPerfect_output', output);
-    }
-  }, [output]);
 
   const handleRephrase = async () => {
     if (!prompt.trim()) return;
@@ -69,8 +53,6 @@ function App() {
     setPrompt('');
     setOutput('');
     setOutputLoaded(false);
-    localStorage.removeItem('promptPerfect_prompt');
-    localStorage.removeItem('promptPerfect_output');
   };
 
   return (
@@ -80,13 +62,6 @@ function App() {
         <div className="header-container">
           {/* Logo & Brand */}
           <div className="header-brand">
-            <div className="header-logo">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
-            </div>
             <h1 className="header-title">Prompt Enhancer</h1>
           </div>
 
@@ -128,7 +103,24 @@ function App() {
                   <div className="card-label-dot input-dot"></div>
                   <span>Input Prompt</span>
                 </div>
-                <span className="card-hint">{prompt.length} characters</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <button 
+                    onClick={() => setPrompt('')} 
+                    disabled={!prompt}
+                    className="btn-ghost" 
+                    style={{ padding: '4px 8px', height: 'auto', fontSize: '0.75rem', gap: '4px', color: 'var(--color-text-secondary)' }}
+                    title="Clear Input"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    Clear
+                  </button>
+                  <span className="card-hint" style={{ borderLeft: '1px solid var(--color-border)', paddingLeft: '10px' }}>
+                    {prompt.length} chars
+                  </span>
+                </div>
               </div>
               
               <div className="card-body">
@@ -207,8 +199,8 @@ function App() {
               </div>
               
               {output && !isLoading && (
-                <div className="card-footer">
-                  <button onClick={handleCopy} className="btn-secondary">
+                <div className="card-footer" style={{ display: 'flex', gap: '12px' }}>
+                  <button onClick={handleCopy} className="btn-secondary" style={{ flex: 1 }}>
                     {copySuccess ? (
                       <>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -222,9 +214,18 @@ function App() {
                           <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                         </svg>
-                        <span>Copy to Clipboard</span>
+                        <span>Copy</span>
                       </>
                     )}
+                  </button>
+                  <button onClick={handleRephrase} className="btn-secondary" style={{ flex: 1 }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 2v6h-6"></path>
+                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                      <path d="M3 22v-6h6"></path>
+                      <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                    </svg>
+                    <span>Regenerate</span>
                   </button>
                 </div>
               )}

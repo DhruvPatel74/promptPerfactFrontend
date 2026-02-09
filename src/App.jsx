@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import WaveBackground from './components/WaveBackground';
 
 function App() {
   const [prompt, setPrompt] = useState(() => {
@@ -75,164 +74,171 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      {/* Vanta.js Wave Animation Background */}
-      <WaveBackground />
-      {/* Increased top padding for badge breathing room */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center px-4 pt-24 pb-20 lg:pt-32">
-        
-        {/* Header - Significantly Increased Spacing */}
-        <header className="text-center grid gap-5 mb-40 lg:mb-56 animate-enter">
-          {/* AI Badge */}
-          <div className="flex justify-center mb-6">
-            <div className="badge-ai">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+    <div className="app-wrapper">
+      {/* ==================== HEADER SECTION ==================== */}
+      <header className="header-section">
+        <div className="header-container">
+          {/* Logo & Brand */}
+          <div className="header-brand">
+            <div className="header-logo">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
               </svg>
-              AI-Powered
             </div>
+            <h1 className="header-title">Prompt Enhancer</h1>
           </div>
-          
-          {/* Title - Gradient Text */}
-          <h1 className="text-5xl lg:text-7xl font-bold tracking-tight font-[Outfit]">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-cyan-400 to-emerald-400">
-              PROMPT ENHANCER
-            </span>
-          </h1>
-          
-          {/* Subtitle */}
-          <div className="text-violet-200/60 text-lg max-w-2xl mx-auto tracking-wide">
-            
-          </div>
-        </header>
 
-        {/* Main Workspace - Added gap-y-16 for mobile stacking */}
-        <main className="w-full max-w-6xl pb-20 pt-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-16 gap-x-8 lg:gap-12 items-start">
+          {/* Header Actions */}
+          <div className="header-actions">
+            {(prompt || output) && (
+              <button onClick={handleClear} className="btn-ghost">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                </svg>
+                <span>Clear All</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* ==================== MAIN SECTION ==================== */}
+      <main className="main-section">
+        <div className="main-container">
+          
+          {/* Hero Text */}
+          <div className="hero-section">
+            <h2 className="hero-title">Refine your prompts for better AI results</h2>
+            <p className="hero-subtitle">
+              Transform simple prompts into detailed, effective instructions that get you better outputs.
+            </p>
+          </div>
+
+          {/* Cards Grid */}
+          <div className="cards-grid">
             
-            {/* ========== INPUT PROMPT Card ========== */}
-            <div className="grid gap-3 glow-card card-animated-border animate-enter stagger-1 ">
-              {/* Card Label */}
-              <div className="card-label">
-                INPUT PROMPT
+            {/* ========== INPUT CARD ========== */}
+            <div className="card card-input animate-enter stagger-1">
+              <div className="card-header">
+                <div className="card-label">
+                  <div className="card-label-dot input-dot"></div>
+                  <span>Input Prompt</span>
+                </div>
+                <span className="card-hint">{prompt.length} characters</span>
               </div>
               
-              {/* Inner Container with Wave Animation */}
-              <div className="card-inner">
-                {/* Visual Effects */}
-                <div className="bg-wave-animation"></div>
-                <div className="input-accent-line"></div>
-                
+              <div className="card-body">
                 <textarea
                   id="promptInput"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  placeholder='Enter your initial prompt here... e.g., "A futuristic city landscape"'
-                  className="prompt-input"
+                  placeholder='Enter your initial prompt here...&#10;&#10;Example: "A futuristic city at sunset with flying cars"'
+                  className="card-textarea"
                 />
               </div>
               
-              {/* Action Row */}
-              <div className="flex items-center gap-4 mt-6">
+              <div className="card-footer">
                 <button 
                   onClick={handleRephrase}
                   disabled={isLoading || !prompt.trim()}
-                  className="btn-primary-enhance flex-1 justify-center"
+                  className="btn-primary"
                 >
                   {isLoading ? (
                     <>
                       <div className="spinner"></div>
-                      <span>ENHANCING...</span>
+                      <span>Enhancing...</span>
                     </>
                   ) : (
                     <>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                       </svg>
-                      <span>ENHANCE</span>
+                      <span>Enhance Prompt</span>
                     </>
                   )}
                 </button>
-                
-                {(prompt || output) && (
-                  <button onClick={handleClear} className="btn-icon-round" title="Clear All">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                  </button>
-                )}
               </div>
             </div>
 
-            {/* ========== ENHANCED OUTPUT Card ========== */}
-            <div key={outputKey} className="glow-card card-animated-border animate-enter stagger-2">
-              {/* Card Label */}
-              <div className="card-label">
-                ENHANCED OUTPUT
+            {/* ========== OUTPUT CARD ========== */}
+            <div key={outputKey} className="card card-output animate-enter stagger-2">
+              <div className="card-header">
+                <div className="card-label">
+                  <div className="card-label-dot output-dot"></div>
+                  <span>Enhanced Output</span>
+                </div>
+                {output && (
+                  <span className="status-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Ready
+                  </span>
+                )}
               </div>
               
-              {/* Inner Container */}
-              <div className="card-inner relative border-cyan-500/20">
-                {/* Subtle blue glow for output card inner */}
-                <div className="absolute inset-0 bg-cyan-500/5 pointer-events-none"></div>
-                
+              <div className="card-body">
                 {isLoading ? (
-                  <div className="h-full flex flex-col items-center justify-center gap-4 py-20">
-                     {/* Custom Spinner */}
-                    <div className="relative w-12 h-12">
-                      <div className="absolute inset-0 border-2 border-cyan-500/20 rounded-full"></div>
-                      <div className="absolute inset-0 border-t-2 border-cyan-400 rounded-full animate-spin"></div>
-                    </div>
-                    <p className="text-sm text-cyan-400 animate-pulse font-medium tracking-wide">Enhancing your prompt...</p>
+                  <div className="card-placeholder loading">
+                    <div className="loading-spinner"></div>
+                    <span>Processing your prompt...</span>
                   </div>
                 ) : output ? (
-                  <div className={`output-text relative z-10 ${outputLoaded ? 'animate-enter' : ''}`}>
+                  <div className={`card-content ${outputLoaded ? 'fade-in' : ''}`}>
                     {output}
                   </div>
                 ) : (
-                  <div className="h-full flex items-center justify-center py-20">
-                    <p className="text-white/30 italic text-center">
-                      Your enhanced prompt will appear here...
-                    </p>
+                  <div className="card-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                      <line x1="10" y1="9" x2="8" y2="9"/>
+                    </svg>
+                    <p className="placeholder-title">Your enhanced prompt will appear here</p>
+                    <p className="placeholder-hint">Enter a prompt on the left and click "Enhance"</p>
                   </div>
                 )}
               </div>
               
-              {/* Action Buttons - Pill Shaped */}
               {output && !isLoading && (
-                <div className="flex flex-col gap-4">
-                  
-                   <button onClick={handleCopy} className="btn-action-pill justify-center w-full border-white/20 hover:border-cyan-400 hover:text-cyan-400">
+                <div className="card-footer">
+                  <button onClick={handleCopy} className="btn-secondary">
                     {copySuccess ? (
                       <>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
                         </svg>
-                        COPIED TO CLIPBOARD
+                        <span>Copied!</span>
                       </>
                     ) : (
                       <>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                         </svg>
-                        COPY TO CLIPBOARD
+                        <span>Copy to Clipboard</span>
                       </>
                     )}
                   </button>
-                    <button onClick={handleRephrase} className="btn-action-pill flex-1 justify-center">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                      REGENERATE
-                    </button>
-                    
-                  
                 </div>
               )}
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
+
+      {/* ==================== FOOTER SECTION ==================== */}
+      <footer className="footer-section">
+        <div className="footer-container">
+          <p>Powered by AI • Made with care</p>
+        </div>
+      </footer>
     </div>
   );
 }
